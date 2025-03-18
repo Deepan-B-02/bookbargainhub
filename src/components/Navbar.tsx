@@ -12,42 +12,16 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
-  const scrollToAbout = () => {
-    if (location.pathname !== '/') {
-      // Navigate to home page first if not already there
-      window.location.href = '/#about';
-    } else {
-      // Scroll to about section if already on home page
-      const aboutSection = document.getElementById('about');
-      if (aboutSection) {
-        aboutSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
-
-  const NavLink = ({ to, children, isAbout = false }: { to: string; children: React.ReactNode; isAbout?: boolean }) => {
-    if (isAbout) {
-      return (
-        <button
-          onClick={scrollToAbout}
-          className="text-sm font-medium transition-colors hover:text-primary"
-        >
-          {children}
-        </button>
-      );
-    }
-    
-    return (
-      <Link
-        to={to}
-        className={`text-sm font-medium transition-colors hover:text-primary ${
-          isActive(to) ? 'text-primary' : 'text-foreground'
-        }`}
-      >
-        {children}
-      </Link>
-    );
-  };
+  const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+    <Link
+      to={to}
+      className={`text-sm font-medium transition-colors hover:text-primary ${
+        isActive(to) ? 'text-primary' : 'text-foreground'
+      }`}
+    >
+      {children}
+    </Link>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
@@ -60,7 +34,7 @@ const Navbar = () => {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/search">Browse</NavLink>
             <NavLink to="/sell">Sell</NavLink>
-            <NavLink to="/" isAbout={true}>About</NavLink>
+            <NavLink to="/about">About</NavLink>
           </nav>
         </div>
 
@@ -99,15 +73,7 @@ const Navbar = () => {
             <Link to="/" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/search" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Browse</Link>
             <Link to="/sell" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Sell</Link>
-            <button 
-              className="text-sm font-medium text-left" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                scrollToAbout();
-              }}
-            >
-              About
-            </button>
+            <Link to="/about" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>About</Link>
           </div>
           <div className="flex space-x-2 pt-2 border-t">
             <Button variant="outline" size="sm" asChild className="flex-1">

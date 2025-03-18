@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { books, categories } from '@/data/books';
@@ -27,7 +28,7 @@ type FilterType = {
   sortBy: string;
 };
 
-const PRICE_RANGE = [0, 100];
+const PRICE_RANGE: [number, number] = [0, 100];
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -150,9 +151,15 @@ const SearchPage = () => {
   
   // Handle price range change
   const handlePriceChange = (value: number[]) => {
+    // Ensure we always have exactly 2 values for the tuple
+    const safeValue: [number, number] = [
+      value[0] ?? PRICE_RANGE[0],
+      value[1] ?? PRICE_RANGE[1]
+    ];
+    
     setFilters(prevFilters => ({
       ...prevFilters,
-      priceRange: [value[0], value[1]]
+      priceRange: safeValue
     }));
   };
   

@@ -44,7 +44,7 @@ export const books: Book[] = [
     location: 'Seattle, WA',
     dateAdded: '2023-10-12',
     featured: true,
-    bestSeller: true,
+    bestSeller: true
   },
   {
     id: '2',
@@ -59,7 +59,7 @@ export const books: Book[] = [
     sellerRating: 4.9,
     location: 'Portland, OR',
     dateAdded: '2023-10-05',
-    featured: true,
+    featured: true
   },
   {
     id: '3',
@@ -75,7 +75,7 @@ export const books: Book[] = [
     sellerRating: 4.7,
     location: 'Austin, TX',
     dateAdded: '2023-09-28',
-    bestSeller: true,
+    bestSeller: true
   },
   {
     id: '4',
@@ -90,7 +90,7 @@ export const books: Book[] = [
     sellerName: 'Memoir Depot',
     sellerRating: 4.5,
     location: 'Boston, MA',
-    dateAdded: '2023-10-01',
+    dateAdded: '2023-10-01'
   },
   {
     id: '5',
@@ -105,7 +105,7 @@ export const books: Book[] = [
     sellerRating: 4.6,
     location: 'Chicago, IL',
     dateAdded: '2023-09-25',
-    featured: true,
+    featured: true
   },
   {
     id: '6',
@@ -119,7 +119,7 @@ export const books: Book[] = [
     sellerName: 'Classic Library',
     sellerRating: 4.4,
     location: 'New York, NY',
-    dateAdded: '2023-09-15',
+    dateAdded: '2023-09-15'
   },
   {
     id: '7',
@@ -134,7 +134,7 @@ export const books: Book[] = [
     sellerRating: 4.9,
     location: 'San Francisco, CA',
     dateAdded: '2023-10-08',
-    bestSeller: true,
+    bestSeller: true
   },
   {
     id: '8',
@@ -149,6 +149,6 @@ export const books: Book[] = [
     sellerName: 'Spiritual Books',
     sellerRating: 4.7,
     location: 'Denver, CO',
-    dateAdded: '2023-09-20',
-  },
+    dateAdded: '2023-09-20'
+  }
 ];

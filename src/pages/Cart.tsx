@@ -16,7 +16,8 @@ import {
   CreditCard,
   ArrowRight,
   ShoppingBag,
-  AlertCircle
+  AlertCircle,
+  Check
 } from 'lucide-react';
 import { books } from '@/data/books';
 

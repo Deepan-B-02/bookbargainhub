@@ -65,7 +65,7 @@ export const books: Book[] = [
     id: '3',
     title: 'Project Hail Mary',
     author: 'Andy Weir',
-    description: 'Ryland Grace is the sole survivor on a desperate, last-chance mission—and if he fails, humanity and the earth itself will perish. Except that right now, he doesn't know that. He can't even remember his own name, let alone the nature of his assignment or how to complete it.',
+    description: 'Ryland Grace is the sole survivor on a desperate, last-chance mission--and if he fails, humanity and the earth itself will perish. Except that right now, he doesn\'t know that. He can\'t even remember his own name, let alone the nature of his assignment or how to complete it.',
     price: 22.50,
     originalPrice: 28.99,
     condition: 'new',

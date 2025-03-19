@@ -1,5 +1,5 @@
-
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { books } from '@/data/books';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -11,10 +11,22 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, BookOpen, Users } from 'lucide-react';
 
 const Index = () => {
-  // Scroll to top on page load
+  const location = useLocation();
+  const footerRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll to top on page load, unless scrollToBottom is in the query params
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    const searchParams = new URLSearchParams(location.search);
+    const shouldScrollToBottom = searchParams.get('scrollToBottom') === 'true';
+    
+    if (shouldScrollToBottom && footerRef.current) {
+      // Scroll to the footer section
+      footerRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Otherwise scroll to top
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
 
   const featuredBooks = books.filter(book => book.featured);
   const bestSellers = books.filter(book => book.bestSeller);
@@ -145,6 +157,83 @@ const Index = () => {
                   </div>
                 </div>
                 <p className="text-muted-foreground italic">"As a collector, I appreciate the detailed condition descriptions and high-quality photos. It makes buying online much more reliable."</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* About section (target for About link) */}
+        <section id="about" className="py-16 bg-primary/5" ref={footerRef}>
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-3xl font-bold tracking-tight">About BookBay</h2>
+              <p className="text-muted-foreground mt-4">Connecting book lovers since 2023</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-4">
+                <p className="text-lg">
+                  BookBay was founded with a simple mission: to give books a second life and connect readers around the world.
+                </p>
+                <p>
+                  We believe that every book deserves a reader who will appreciate it. That's why we've created a platform where book enthusiasts can buy, sell, and trade books easily and securely.
+                </p>
+                <p>
+                  Our community spans across 50+ countries and includes students, teachers, collectors, and casual readers who all share a passion for the written word.
+                </p>
+                <div className="pt-4">
+                  <h3 className="font-semibold text-lg mb-2">Our Values</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2">•</span>
+                      <span>Making literature accessible to everyone</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2">•</span>
+                      <span>Promoting sustainability through reuse</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2">•</span>
+                      <span>Building a global community of readers</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2">•</span>
+                      <span>Supporting independent authors and sellers</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-card rounded-lg border p-6">
+                <h3 className="font-semibold text-lg mb-4">BookBay by the Numbers</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-secondary rounded-lg">
+                    <div className="text-3xl font-bold text-primary">500K+</div>
+                    <div className="text-sm text-muted-foreground">Books Listed</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary rounded-lg">
+                    <div className="text-3xl font-bold text-primary">100K+</div>
+                    <div className="text-sm text-muted-foreground">Active Users</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary rounded-lg">
+                    <div className="text-3xl font-bold text-primary">30+</div>
+                    <div className="text-sm text-muted-foreground">Categories</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary rounded-lg">
+                    <div className="text-3xl font-bold text-primary">4.8/5</div>
+                    <div className="text-sm text-muted-foreground">User Rating</div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 space-y-2">
+                  <h4 className="font-medium">Contact Us</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Have questions or suggestions? We'd love to hear from you!
+                  </p>
+                  <Button variant="outline" className="w-full mt-2">
+                    hello@bookbay.com
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

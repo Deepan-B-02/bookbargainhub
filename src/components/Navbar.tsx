@@ -1,23 +1,45 @@
 
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
-  const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+  // Handle About navigation to scroll to the bottom of the homepage
+  const handleAboutClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      // If already on homepage, just scroll to bottom
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    } else {
+      // Navigate to homepage with a hash that will scroll to bottom
+      navigate('/?scrollToBottom=true');
+    }
+    
+    // Close mobile menu if open
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  const NavLink = ({ to, children, onClick }: { to: string; children: React.ReactNode; onClick?: (e: React.MouseEvent) => void }) => (
     <Link
       to={to}
       className={`text-sm font-medium transition-colors hover:text-primary ${
         isActive(to) ? 'text-primary' : 'text-foreground'
       }`}
+      onClick={onClick}
     >
       {children}
     </Link>
@@ -34,7 +56,7 @@ const Navbar = () => {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/search">Browse</NavLink>
             <NavLink to="/sell">Sell</NavLink>
-            <NavLink to="/about">About</NavLink>
+            <NavLink to="/" onClick={handleAboutClick}>About</NavLink>
           </nav>
         </div>
 
@@ -73,7 +95,7 @@ const Navbar = () => {
             <Link to="/" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/search" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Browse</Link>
             <Link to="/sell" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>Sell</Link>
-            <Link to="/about" className="text-sm font-medium" onClick={() => setIsMenuOpen(false)}>About</Link>
+            <Link to="/" className="text-sm font-medium" onClick={handleAboutClick}>About</Link>
           </div>
           <div className="flex space-x-2 pt-2 border-t">
             <Button variant="outline" size="sm" asChild className="flex-1">

@@ -11,12 +11,12 @@ import { books } from '@/data/books';
 
 // Mock cart data - in a real app this would come from context or state management
 const initialCartItems = [
-  { bookId: 1, quantity: 1 },
-  { bookId: 3, quantity: 2 },
+  { bookId: '1', quantity: 1 },
+  { bookId: '3', quantity: 2 },
 ];
 
 interface CartItem {
-  bookId: number;
+  bookId: string; // Changed from number to string to match Book.id type
   quantity: number;
 }
 
@@ -56,7 +56,7 @@ const Cart = () => {
   }, [cartItems]);
   
   // Remove item from cart
-  const removeItem = (bookId: number) => {
+  const removeItem = (bookId: string) => { // Changed from number to string
     setCartItems(prevItems => prevItems.filter(item => item.bookId !== bookId));
     
     toast({
@@ -66,7 +66,7 @@ const Cart = () => {
   };
   
   // Update quantity
-  const updateQuantity = (bookId: number, newQuantity: number) => {
+  const updateQuantity = (bookId: string, newQuantity: number) => { // Changed from number to string
     if (newQuantity < 1) return;
     
     setCartItems(prevItems => 

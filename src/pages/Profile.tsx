@@ -187,7 +187,7 @@ const Profile = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {user.booksListed}
+                      {currentUser.booksListed}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       +3 this month
@@ -204,7 +204,7 @@ const Profile = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {user.booksSold}
+                      {currentUser.booksSold}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       +2 this month
@@ -221,7 +221,7 @@ const Profile = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {user.booksPurchased}
+                      {currentUser.booksPurchased}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       +1 this month

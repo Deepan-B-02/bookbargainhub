@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Book } from '@/data/books';
 import { Badge } from "@/components/ui/badge";
-import { StarIcon } from 'lucide-react';
+import { StarIcon, BookOpen } from 'lucide-react';
 
 interface BookCardProps {
   book: Book;
@@ -12,24 +12,31 @@ interface BookCardProps {
 
 const BookCard = ({ book, featured = false }: BookCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
+  const handleImageError = () => {
+    console.error(`Failed to load image: ${book.coverImage}`);
+    setImageError(true);
+  };
   
   return (
     <Link to={`/book/${book.id}`} className={`group block ${featured ? 'h-full' : ''}`}>
       <div className={`book-hover-card overflow-hidden rounded-lg border bg-card ${featured ? 'h-full flex flex-col' : ''}`}>
         <div className="relative aspect-[2/3] w-full overflow-hidden bg-secondary/40">
-          {!imageLoaded && (
+          {(!imageLoaded || imageError) && (
             <div className="absolute inset-0 flex items-center justify-center bg-secondary animate-pulse">
-              <span className="sr-only">Loading...</span>
+              <BookOpen className="h-8 w-8 text-muted-foreground/40" />
             </div>
           )}
           
           <img
-            src={book.coverImage}
+            src={imageError ? "/placeholder.svg" : book.coverImage}
             alt={book.title}
             className={`h-full w-full object-cover transition-all duration-300 group-hover:scale-105 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
+              imageLoaded && !imageError ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setImageLoaded(true)}
+            onError={handleImageError}
           />
           
           {book.condition !== 'new' && (

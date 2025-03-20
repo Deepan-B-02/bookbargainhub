@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -19,27 +18,23 @@ import {
 } from 'lucide-react';
 import { books } from '@/data/books';
 import BookCard from '@/components/BookCard';
-import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const { currentUser, signOut } = useAuth();
+  const [activeTab, setActiveTab] = useState('dashboard');
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Redirect if not logged in
+    if (!currentUser) {
+      navigate('/auth');
+    }
+  }, [currentUser, navigate]);
   
-  const [activeTab, setActiveTab] = useState('dashboard');
-  
-  // Mock user data
-  const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: null,
-    memberSince: 'January 2023',
-    booksListed: 12,
-    booksSold: 8,
-    booksPurchased: 15,
-  };
-  
-  // Mock orders
+  // Mock orders - in a real app, this would come from a database
   const orders = [
     {
       id: 'ORD-123456',
@@ -64,7 +59,7 @@ const Profile = () => {
     },
   ];
   
-  // Mock messages
+  // Mock messages - in a real app, this would come from a database
   const messages = [
     {
       id: 'MSG-123',
@@ -96,9 +91,14 @@ const Profile = () => {
   const savedBooks = books.slice(2, 6);
   
   const handleLogout = () => {
-    toast.success("Successfully logged out");
-    // TODO: Implement real logout functionality
+    signOut();
+    navigate('/');
   };
+  
+  // If not logged in, don't render the profile page
+  if (!currentUser) {
+    return null;
+  }
   
   return (
     <div className="flex min-h-screen flex-col">
@@ -110,11 +110,11 @@ const Profile = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-medium text-primary">
-                  {user.name.charAt(0)}
+                  {currentUser.name.charAt(0)}
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold">{user.name}</h1>
-                  <p className="text-sm text-muted-foreground">Member since {user.memberSince}</p>
+                  <h1 className="text-2xl font-bold">{currentUser.name}</h1>
+                  <p className="text-sm text-muted-foreground">Member since {currentUser.memberSince}</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">

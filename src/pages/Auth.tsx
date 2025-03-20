@@ -9,10 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { signIn, signUp, currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState<string>(
     searchParams.get('tab') === 'signup' ? 'signup' : 'signin'
   );
@@ -30,21 +32,28 @@ const Auth = () => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Redirect if user is already logged in
+    if (currentUser) {
+      navigate('/profile');
+    }
+  }, [currentUser, navigate]);
   
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signinEmail || !signinPassword) {
       toast.error("Please fill in all fields");
       return;
     }
     
-    // TODO: Implement real authentication
-    toast.success("Successfully signed in!");
-    navigate('/profile');
+    const success = await signIn(signinEmail, signinPassword);
+    if (success) {
+      toast.success("Successfully signed in!");
+      navigate('/profile');
+    }
   };
   
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signupName || !signupEmail || !signupPassword || !signupConfirmPassword) {
       toast.error("Please fill in all fields");
@@ -61,9 +70,11 @@ const Auth = () => {
       return;
     }
     
-    // TODO: Implement real authentication
-    toast.success("Account created successfully!");
-    navigate('/profile');
+    const success = await signUp(signupName, signupEmail, signupPassword);
+    if (success) {
+      toast.success("Account created successfully!");
+      navigate('/profile');
+    }
   };
   
   return (

@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -71,14 +73,30 @@ const Navbar = () => {
               <ShoppingCart className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="outline" size="icon" asChild>
-            <Link to="/auth" aria-label="User account">
-              <User className="h-4 w-4" />
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link to="/auth">Sign In</Link>
-          </Button>
+          
+          {currentUser ? (
+            <Button variant="outline" size="icon" asChild>
+              <Link to="/profile" aria-label="User profile">
+                <User className="h-4 w-4" />
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="outline" size="icon" asChild>
+              <Link to="/auth" aria-label="User account">
+                <User className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+          
+          {currentUser ? (
+            <Button asChild>
+              <Link to="/profile">{currentUser.name}</Link>
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link to="/auth">Sign In</Link>
+            </Button>
+          )}
         </div>
 
         <div className="md:hidden flex items-center">
@@ -98,12 +116,20 @@ const Navbar = () => {
             <Link to="/" className="text-sm font-medium" onClick={handleAboutClick}>About</Link>
           </div>
           <div className="flex space-x-2 pt-2 border-t">
-            <Button variant="outline" size="sm" asChild className="flex-1">
-              <Link to="/auth">Sign In</Link>
-            </Button>
-            <Button size="sm" asChild className="flex-1">
-              <Link to="/auth?tab=signup">Sign Up</Link>
-            </Button>
+            {currentUser ? (
+              <Button asChild className="flex-1">
+                <Link to="/profile">My Profile</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" asChild className="flex-1">
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild className="flex-1">
+                  <Link to="/auth?tab=signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Book } from '@/data/books';
 import { Badge } from "@/components/ui/badge";
 import { StarIcon, BookIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface BookCardProps {
   book: Book;
@@ -23,10 +24,26 @@ const BookCard = ({ book, featured = false }: BookCardProps) => {
     setImageError(true);
     setImageLoaded(true); // Consider it "loaded" to remove loading state
   };
+
+  // Default fallback images if the original image fails to load
+  const fallbackImages = [
+    'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=387&h=580',
+    'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=387&h=580',
+    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=387&h=580',
+    'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=387&h=580'
+  ];
+  
+  // Use book ID to pick a consistent fallback image
+  const fallbackImageIndex = parseInt(book.id, 10) % fallbackImages.length;
+  const fallbackImage = fallbackImages[fallbackImageIndex];
   
   return (
     <Link to={`/book/${book.id}`} className={`group block ${featured ? 'h-full' : ''}`}>
-      <div className={`book-hover-card overflow-hidden rounded-lg border bg-card ${featured ? 'h-full flex flex-col' : ''}`}>
+      <div className={cn(
+        "book-hover-card overflow-hidden rounded-lg border bg-card card-shine", 
+        featured ? 'h-full flex flex-col' : '',
+        "transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      )}>
         <div className="relative aspect-[2/3] w-full overflow-hidden bg-secondary/40">
           {!imageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center bg-secondary animate-pulse">
@@ -35,16 +52,25 @@ const BookCard = ({ book, featured = false }: BookCardProps) => {
           )}
           
           {imageError ? (
-            <div className="h-full w-full flex items-center justify-center bg-secondary/60">
-              <BookIcon className="h-12 w-12 text-primary/40" />
+            <div className="relative h-full w-full overflow-hidden">
+              <img
+                src={fallbackImage}
+                alt={book.title}
+                className="h-full w-full object-cover transition-all duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-secondary/60">
+                <BookIcon className="h-12 w-12 text-primary/70" />
+              </div>
             </div>
           ) : (
             <img
               src={book.coverImage}
               alt={book.title}
-              className={`h-full w-full object-cover transition-all duration-300 group-hover:scale-105 ${
+              className={cn(
+                "h-full w-full object-cover transition-all duration-500", 
+                "hover-scale-image group-hover:scale-105",
                 imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              )}
               onLoad={handleImageLoad}
               onError={handleImageError}
             />
@@ -55,7 +81,7 @@ const BookCard = ({ book, featured = false }: BookCardProps) => {
           )}
           
           {book.bestSeller && (
-            <Badge className="absolute top-2 left-2 bg-amber-500 text-white z-10">Bestseller</Badge>
+            <Badge className="absolute top-2 left-2 bg-amber-500 text-white z-10 shine-effect">Bestseller</Badge>
           )}
         </div>
         
